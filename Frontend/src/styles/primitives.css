@@ -1,0 +1,165 @@
+/* ============================================================
+   FinSight AI — Primitives
+   Buttons, badges, inputs, spinner — restrained.
+   ============================================================ */
+
+/* ── Button ──────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: inherit;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  cursor: pointer;
+  line-height: 1;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn--primary {
+  background: var(--color-accent);
+  color: hsl(216, 18%, 8%);
+  border-color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+.btn--primary:hover {
+  background: hsl(210, 55%, 58%);
+  border-color: hsl(210, 55%, 58%);
+}
+
+.btn--secondary {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+.btn--secondary:hover {
+  background: var(--color-bg-overlay);
+  color: var(--color-text-primary);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border-color: transparent;
+}
+.btn--ghost:hover {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+}
+
+.btn--icon {
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.btn--sm {
+  padding: 3px var(--space-3);
+  font-size: var(--font-size-xs);
+}
+
+/* ── Badge — small inline indicators ────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+
+.badge--gain {
+  background: var(--color-gain-bg);
+  color: var(--color-gain-text);
+  border-color: hsla(145, 48%, 44%, 0.22);
+}
+.badge--loss {
+  background: var(--color-loss-bg);
+  color: var(--color-loss-text);
+  border-color: hsla(355, 62%, 52%, 0.22);
+}
+.badge--neutral {
+  background: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+.badge--risk-low       { background: hsla(145,48%,44%,0.1); color: hsl(145,55%,52%); border-color: hsla(145,48%,44%,0.25); }
+.badge--risk-medium    { background: hsla(38,80%,52%,0.1);  color: hsl(38,80%,60%);  border-color: hsla(38,80%,52%,0.25); }
+.badge--risk-high      { background: hsla(22,80%,52%,0.1);  color: hsl(22,80%,62%);  border-color: hsla(22,80%,52%,0.25); }
+.badge--risk-very-high { background: hsla(355,62%,52%,0.1); color: hsl(355,65%,62%); border-color: hsla(355,62%,52%,0.25); }
+
+/* ── Input ───────────────────────────────────────── */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-wrap__icon {
+  position: absolute;
+  left: var(--space-3);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+.input {
+  width: 100%;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  transition: border-color var(--transition-fast);
+  outline: none;
+}
+.input--with-icon { padding-left: calc(var(--space-3) + 20px); }
+.input:focus { border-color: var(--color-border-focus); }
+.input::placeholder { color: var(--color-text-muted); }
+
+/* ── Spinner ─────────────────────────────────────── */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--color-border-strong);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+.spinner--sm { width: 12px; height: 12px; }
+
+/* ── Divider ─────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ── Section heading ─────────────────────────────── */
+.section-heading {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ── Skeleton sizes ──────────────────────────────── */
+.skeleton-h1   { height: 40px; }
+.skeleton-h2   { height: 28px; }
+.skeleton-h3   { height: 20px; }
+.skeleton-text { height: 14px; }
+.skeleton-chart{ height: 280px; }
+.skeleton-block{ border-radius: var(--radius-sm); }
