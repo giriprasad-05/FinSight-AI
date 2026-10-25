@@ -19,10 +19,11 @@ interface MentorState {
 }
 
 function makeWelcomeMessage(ctx: MentorContext): ChatMessage {
+  const riskInfo = ctx.riskScore > 0 ? `Score: ${ctx.riskScore} (${ctx.riskLevel} Risk)` : `${ctx.riskLevel} Risk`;
   return {
     id: `welcome-${ctx.ticker}`,
     role: 'assistant',
-    content: `👋 Hello! I'm your **AI Investment Mentor** for **${ctx.ticker} — ${ctx.companyName}**.\n\nI can help you understand:\n• What the **${ctx.riskLevel} risk rating** means for this stock\n• The current **${ctx.trendDirection} trend** analysis\n• Financial concepts like P/E ratio, beta, volatility, and more\n\nI'm an educational tool — I won't tell you what to buy or sell. But I'll help you make sense of what you're seeing.\n\n_Try asking: "What is beta?" or "What does the risk score mean?"_`,
+    content: `👋 Hello! I'm FinSight AI, your dedicated analysis assistant for **${ctx.ticker}**.\n\nI answer questions specifically about **${ctx.ticker}** using FinSight's real quantitative analysis:\n• **Risk Profile**: ${riskInfo}\n• **Model Trend**: ${ctx.trendDirection}\n• Technical indicators (RSI, MACD, Moving Averages)\n• Top model drivers & watch items\n\n_Ask a question below or choose a suggestion to get started!_`,
     timestamp: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
   };
 }
@@ -34,9 +35,14 @@ export const useMentorStore = create<MentorState>((set) => ({
   context: null,
 
   setContext: (ctx) =>
-    set({
-      context: ctx,
-      messages: [makeWelcomeMessage(ctx)],
+    set((state) => {
+      if (state.context?.ticker === ctx.ticker) {
+        return { context: ctx };
+      }
+      return {
+        context: ctx,
+        messages: [makeWelcomeMessage(ctx)],
+      };
     }),
 
   addMessage: (msg) =>

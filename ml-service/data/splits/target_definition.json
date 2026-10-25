@@ -1,0 +1,15 @@
+{
+  "target_name": "Trend_Code",
+  "label_column": "Trend_Label",
+  "classes": {
+    "DOWN": 0,
+    "FLAT": 1,
+    "UP": 2
+  },
+  "thresholds": {
+    "UP": "> +1.0%",
+    "DOWN": "< -1.0%",
+    "FLAT": "[-1.0%, +1.0%]"
+  },
+  "description": "Next trading day directional price movement classification."
+}

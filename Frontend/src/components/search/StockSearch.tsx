@@ -1,29 +1,37 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X } from 'lucide-react';
 import { useStockStore } from '@/store/stockStore';
 import { useStockSearch } from '@/hooks/useStockData';
-import { MOCK_STOCK_LIST } from '@/data/stocks';
 
 interface StockSearchProps {
   placeholder?: string;
 }
 
 export function StockSearch({ placeholder }: StockSearchProps): React.ReactElement {
-  const [query, setQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const selectStock = useStockStore(s => s.selectStock);
 
-  const { data: searchResults, isLoading } = useStockSearch(query);
-  const displayResults = query.length > 0 ? (searchResults ?? []) : MOCK_STOCK_LIST.slice(0, 8);
+  // Debounce search input (250ms) to avoid excessive queries while typing
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchTerm.trim());
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  // Query backend search API (returns all 35 stocks on empty query, or filtered results)
+  const { data: searchResults, isLoading, isError } = useStockSearch(debouncedQuery);
 
   const handleSelect = useCallback((ticker: string) => {
-    const meta = MOCK_STOCK_LIST.find(s => s.ticker === ticker);
-    selectStock(ticker, meta);
-    setQuery('');
+    selectStock(ticker);
+    setSearchTerm('');
+    setDebouncedQuery('');
     setIsOpen(false);
     navigate(`/stock/${ticker}`);
   }, [navigate, selectStock]);
@@ -41,15 +49,29 @@ export function StockSearch({ placeholder }: StockSearchProps): React.ReactEleme
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
+  const results = useMemo(() => searchResults ?? [], [searchResults]);
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       setIsOpen(false);
-      setQuery('');
+      setSearchTerm('');
+      setDebouncedQuery('');
     }
-    if (e.key === 'Enter' && displayResults.length > 0) {
-      handleSelect(displayResults[0].ticker);
+    if (e.key === 'Enter' && results.length > 0) {
+      handleSelect(results[0].ticker);
     }
-  }, [displayResults, handleSelect]);
+  }, [results, handleSelect]);
+
+  // When query is empty, group all 35 supported stocks by market (United States & India)
+  const isUniverseView = debouncedQuery === '';
+  const usStocks = useMemo(
+    () => results.filter(s => s.country === 'United States' || !s.ticker.endsWith('.NS')),
+    [results]
+  );
+  const indiaStocks = useMemo(
+    () => results.filter(s => s.country === 'India' || s.ticker.endsWith('.NS')),
+    [results]
+  );
 
   return (
     <div className="stock-search">
@@ -59,10 +81,10 @@ export function StockSearch({ placeholder }: StockSearchProps): React.ReactEleme
           ref={inputRef}
           type="text"
           className="stock-search__input"
-          placeholder={placeholder ?? 'Search stocks (e.g., AAPL, Apple Inc., NVDA, MSFT)'}
-          value={query}
+          placeholder={placeholder ?? 'Search all 35 stocks (e.g., AAPL, RELIANCE, TCS, NVDA)'}
+          value={searchTerm}
           onChange={e => {
-            setQuery(e.target.value);
+            setSearchTerm(e.target.value);
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
@@ -70,7 +92,7 @@ export function StockSearch({ placeholder }: StockSearchProps): React.ReactEleme
           autoComplete="off"
           spellCheck={false}
         />
-        {query && (
+        {searchTerm && (
           <button
             type="button"
             aria-label="Clear search"
@@ -89,7 +111,8 @@ export function StockSearch({ placeholder }: StockSearchProps): React.ReactEleme
               padding: '4px',
             }}
             onClick={() => {
-              setQuery('');
+              setSearchTerm('');
+              setDebouncedQuery('');
               inputRef.current?.focus();
             }}
           >
@@ -101,29 +124,97 @@ export function StockSearch({ placeholder }: StockSearchProps): React.ReactEleme
       {isOpen && (
         <div ref={dropdownRef} className="stock-search__dropdown">
           {isLoading && (
-            <div style={{ padding: 'var(--space-3) var(--space-4)', color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
-              Searching…
+            <div className="stock-search__status">
+              Searching...
             </div>
           )}
-          {!isLoading && displayResults.length === 0 && (
-            <div style={{ padding: 'var(--space-4)', color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)', textAlign: 'center' }}>
-              No results for "{query}"
+
+          {isError && (
+            <div className="stock-search__status stock-search__status--error">
+              Unable to search stocks.
             </div>
           )}
-          {!isLoading && displayResults.map(s => (
-            <button
-              key={s.ticker}
-              type="button"
-              className="stock-search__item"
-              onClick={() => handleSelect(s.ticker)}
-            >
-              <span className="stock-search__ticker">{s.ticker}</span>
-              <span className="stock-search__name">{s.name}</span>
-              <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)' }}>
-                {s.sector}
-              </span>
-            </button>
-          ))}
+
+          {!isLoading && !isError && results.length === 0 && (
+            <div className="stock-search__status">
+              No supported stocks found.
+            </div>
+          )}
+
+          {!isLoading && !isError && results.length > 0 && (
+            <>
+              {isUniverseView ? (
+                <>
+                  {usStocks.length > 0 && (
+                    <>
+                      <div className="stock-search__group-header">
+                        United States ({usStocks.length})
+                      </div>
+                      {usStocks.map(s => (
+                        <button
+                          key={s.ticker}
+                          type="button"
+                          className="stock-search__item"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            handleSelect(s.ticker);
+                          }}
+                          onClick={() => handleSelect(s.ticker)}
+                        >
+                          <span className="stock-search__ticker">{s.ticker}</span>
+                          <span className="stock-search__name">{s.name}</span>
+                          <span className="stock-search__market">US</span>
+                        </button>
+                      ))}
+                    </>
+                  )}
+
+                  {indiaStocks.length > 0 && (
+                    <>
+                      <div className="stock-search__group-header">
+                        India / NSE ({indiaStocks.length})
+                      </div>
+                      {indiaStocks.map(s => (
+                        <button
+                          key={s.ticker}
+                          type="button"
+                          className="stock-search__item"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            handleSelect(s.ticker);
+                          }}
+                          onClick={() => handleSelect(s.ticker)}
+                        >
+                          <span className="stock-search__ticker">{s.ticker}</span>
+                          <span className="stock-search__name">{s.name}</span>
+                          <span className="stock-search__market">India</span>
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </>
+              ) : (
+                results.map(s => (
+                  <button
+                    key={s.ticker}
+                    type="button"
+                    className="stock-search__item"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleSelect(s.ticker);
+                    }}
+                    onClick={() => handleSelect(s.ticker)}
+                  >
+                    <span className="stock-search__ticker">{s.ticker}</span>
+                    <span className="stock-search__name">{s.name}</span>
+                    <span className="stock-search__market">
+                      {s.country === 'India' || s.ticker.endsWith('.NS') ? 'India' : 'US'}
+                    </span>
+                  </button>
+                ))
+              )}
+            </>
+          )}
         </div>
       )}
     </div>

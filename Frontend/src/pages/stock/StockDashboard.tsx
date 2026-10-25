@@ -7,7 +7,7 @@ import {
   usePriceHistory,
   useRiskAssessment,
   useTrendAnalysis,
-  useEducationalInsight,
+  useStockExplanation,
 } from '@/hooks/useStockData';
 
 import { StockHeader } from '@/features/stock/StockHeader';
@@ -16,7 +16,6 @@ import { PriceChart } from '@/features/chart/PriceChart';
 import { RiskAnalysis } from '@/features/risk/RiskAnalysis';
 import { TrendAnalysis } from '@/features/risk/TrendAnalysis';
 import { ExplainableAI } from '@/features/explainability/ExplainableAI';
-import { EducationalInsight } from '@/features/education/EducationalInsight';
 import { InvestmentMentor } from '@/features/mentor/InvestmentMentor';
 
 function DashboardSkeleton(): React.ReactElement {
@@ -69,7 +68,7 @@ export function StockDashboard(): React.ReactElement {
   const historyQuery = usePriceHistory(ticker, timeRange);
   const riskQuery    = useRiskAssessment(ticker);
   const trendQuery   = useTrendAnalysis(ticker);
-  const insightQuery = useEducationalInsight(ticker);
+  const explainQuery = useStockExplanation(ticker);
 
   useEffect(() => {
     const s = stockQuery.data;
@@ -118,15 +117,15 @@ export function StockDashboard(): React.ReactElement {
         {trendQuery.data && <TrendAnalysis trend={trendQuery.data} />}
       </div>
 
-      {riskQuery.data && (
-        <ExplainableAI 
-          summary={riskQuery.data.summary} 
-          features={riskQuery.data.featureImportances} 
-        />
-      )}
+      <ExplainableAI 
+        explanation={explainQuery.data}
+        isLoading={explainQuery.isLoading}
+        isError={explainQuery.isError}
+        summary={riskQuery.data?.summary} 
+        features={riskQuery.data?.featureImportances} 
+      />
 
       <div className="bottom-grid">
-        {insightQuery.data && <EducationalInsight insight={insightQuery.data} />}
         <InvestmentMentor />
       </div>
 

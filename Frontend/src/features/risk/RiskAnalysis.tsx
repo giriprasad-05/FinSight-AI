@@ -27,7 +27,9 @@ export function RiskAnalysis({ risk }: RiskAnalysisProps): React.ReactElement {
         <div className="analysis-factors__title">Key Factors</div>
         {risk.factors.slice(0, 3).map((f, i) => (
           <div key={i} className="analysis-factor">
-            {f.label}
+            {/* Display f.value (the real explanation text from the risk engine),
+                not f.label which is the generic "Risk Factor N" label */}
+            {f.value || f.label}
           </div>
         ))}
       </div>

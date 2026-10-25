@@ -18,7 +18,7 @@ export interface StockDetail extends StockMeta {
   price: number;
   priceChange: number;        // absolute change today
   priceChangePct: number;     // percentage change today
-  marketCap: number;          // in USD
+  marketCap: number;          // in local currency
   volume: number;
   avgVolume: number;
   peRatio: number | null;
@@ -33,6 +33,10 @@ export interface StockDetail extends StockMeta {
   founded: number;
   website: string;
   marketStatus: MarketStatus;
+  // Real-data fields (populated when VITE_USE_MOCK=false)
+  currency?: string;            // e.g. 'USD' or 'INR'
+  market?: string;              // 'US' | 'IN'
+  quoteTimestamp?: string | null; // ISO timestamp from yfinance
 }
 
 export interface PricePoint {

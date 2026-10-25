@@ -1,0 +1,203 @@
+{
+  "model_type": "XGBClassifier",
+  "model_version": "v2",
+  "objective": "multi:softprob",
+  "num_classes": 3,
+  "class_mapping": {
+    "0": "DOWN",
+    "1": "FLAT",
+    "2": "UP"
+  },
+  "random_seed": 42,
+  "tree_method": "hist (CPU)",
+  "xgboost_version": "3.4.1",
+  "numpy_version": "2.1.3",
+  "pandas_version": "2.2.3",
+  "python_version": "3.13.5",
+  "training_datetime": "2026-08-26 22:19:02",
+  "feature_names": [
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "Volume",
+    "Daily_Return",
+    "MA_5",
+    "MA_50",
+    "RSI_14",
+    "MACD",
+    "MACD_Signal",
+    "Volatility_20",
+    "Volume_Change",
+    "Price_Change_Pct",
+    "High_Low_Pct"
+  ],
+  "feature_count": 15,
+  "target_name": "Trend_Code",
+  "target_definition": {
+    "target_name": "Trend_Code",
+    "label_column": "Trend_Label",
+    "classes": {
+      "DOWN": 0,
+      "FLAT": 1,
+      "UP": 2
+    },
+    "thresholds": {
+      "UP": "> +1.0%",
+      "DOWN": "< -1.0%",
+      "FLAT": "[-1.0%, +1.0%]"
+    },
+    "description": "Next trading day directional price movement classification."
+  },
+  "train_row_count": 47369,
+  "validation_row_count": 10161,
+  "test_row_count": 10120,
+  "best_iteration": 96,
+  "class_weight_config": {
+    "DOWN": 1.3643538120337568,
+    "FLAT": 0.6886930983847284,
+    "UP": 1.2269536612531406
+  },
+  "threshold_multipliers": {
+    "DOWN": 1.0,
+    "FLAT": 1.0,
+    "UP": 1.0
+  },
+  "selected_hyperparameters": {
+    "n_estimators": 500,
+    "learning_rate": 0.05,
+    "max_depth": 6,
+    "min_child_weight": 3,
+    "subsample": 1.0,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.0,
+    "reg_lambda": 2
+  },
+  "experiments_performed": [
+    "Exp1_class_weighting",
+    "Exp2_hyperparameter_tuning",
+    "Exp3_threshold_adjustment",
+    "Exp4_feature_ablation"
+  ],
+  "exp1_best_config": "5_inv_freq",
+  "exp4_best_feature_set": "E_no_redundant_MA",
+  "v1_test_metrics": {
+    "accuracy": 0.5558300395256917,
+    "f1_macro": 0.34592282680718034,
+    "per_class": {
+      "DOWN": {
+        "precision": 0.3912133891213389,
+        "recall": 0.08230633802816902,
+        "f1": 0.136
+      },
+      "FLAT": {
+        "precision": 0.5808234630569656,
+        "recall": 0.9375455207574654,
+        "f1": 0.7172807689628753
+      },
+      "UP": {
+        "precision": 0.37194337194337196,
+        "recall": 0.12266553480475383,
+        "f1": 0.18448771145866583
+      }
+    }
+  },
+  "majority_baseline_test": {
+    "accuracy": 0.5426877470355731,
+    "f1_macro": 0.23452045435135369
+  },
+  "validation_metrics": {
+    "accuracy": 0.5041826591870879,
+    "f1_macro": 0.4109128376675996,
+    "f1_weighted": 0.4861034259882425,
+    "precision_macro": 0.41858534543721393,
+    "precision_weighted": 0.4774035344061154,
+    "recall_macro": 0.41262495753950335,
+    "recall_weighted": 0.5041826591870879,
+    "roc_auc_ovr_macro": 0.6082793481881835,
+    "per_class": {
+      "DOWN": {
+        "precision": 0.30596658711217184,
+        "recall": 0.2823788546255507,
+        "f1": 0.2936998854524628
+      },
+      "FLAT": {
+        "precision": 0.6166482388248302,
+        "recall": 0.7245731254639941,
+        "f1": 0.6662684529396706
+      },
+      "UP": {
+        "precision": 0.3331412103746398,
+        "recall": 0.23092289252896525,
+        "f1": 0.2727701746106654
+      }
+    },
+    "confusion_matrix": [
+      [
+        641,
+        1161,
+        468
+      ],
+      [
+        795,
+        3904,
+        689
+      ],
+      [
+        659,
+        1266,
+        578
+      ]
+    ]
+  },
+  "test_metrics": {
+    "accuracy": 0.5020750988142293,
+    "f1_macro": 0.4054784248009044,
+    "f1_weighted": 0.4878288316529779,
+    "precision_macro": 0.4101703830887444,
+    "precision_weighted": 0.4789712099792233,
+    "recall_macro": 0.40623431281483985,
+    "recall_weighted": 0.5020750988142293,
+    "roc_auc_ovr_macro": 0.616751297521137,
+    "per_class": {
+      "DOWN": {
+        "precision": 0.2917647058823529,
+        "recall": 0.272887323943662,
+        "f1": 0.2820104616784171
+      },
+      "FLAT": {
+        "precision": 0.629021879021879,
+        "recall": 0.7119446467589221,
+        "f1": 0.6679193713700035
+      },
+      "UP": {
+        "precision": 0.30972456436200113,
+        "recall": 0.23387096774193547,
+        "f1": 0.2665054413542926
+      }
+    },
+    "confusion_matrix": [
+      [
+        620,
+        1155,
+        497
+      ],
+      [
+        851,
+        3910,
+        731
+      ],
+      [
+        654,
+        1151,
+        551
+      ]
+    ]
+  },
+  "model_artifacts": {
+    "model_file": "D:\\FinSight AI\\ml-service\\models\\xgboost_trend_model_v2.json",
+    "metadata_file": "D:\\FinSight AI\\ml-service\\models\\model_metadata_v2.json",
+    "validation_predictions_file": "D:\\FinSight AI\\ml-service\\models\\validation_predictions_v2.csv",
+    "test_predictions_file": "D:\\FinSight AI\\ml-service\\models\\test_predictions_v2.csv"
+  }
+}

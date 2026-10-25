@@ -58,3 +58,33 @@ export interface EducationalInsight {
   tip: string;
   learnMoreUrl?: string;
 }
+
+export interface KeyDriver {
+  feature: string;
+  name: string;
+  value: string;
+  importance: number;
+  explanation: string;
+}
+
+export interface LLMMetadata {
+  enabled: boolean;
+  used: boolean;
+  model: string | null;
+  fallback_reason?: string;
+}
+
+export interface AIExplanation {
+  ticker: string;
+  prediction: string;
+  confidence: number;
+  risk_score: number;
+  risk_level: string;
+  headline?: string;
+  summary: string;
+  trend_explanation: string;
+  key_drivers: KeyDriver[];
+  risk_explanation: string;
+  watch_items: string[];
+  llm?: LLMMetadata;
+}

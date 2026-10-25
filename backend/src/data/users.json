@@ -1,0 +1,20 @@
+[
+  {
+    "id": "user_1791518127983_38f5e5e8",
+    "username": "giri_7",
+    "email": "girigiriprasad175@gmail.com",
+    "name": "Giri",
+    "salt": "59e6b675d8ff1277fdcece9acac22f18",
+    "passwordHash": "5bbe80d7754a310a048dbb06bd7aa6e0b8e58e3cad86821151fc345b08bcbe1b9c5dab4c99be631b581f1a32ff9b3224ae70aac40d3b9474e9e1c9df20d3580e",
+    "createdAt": "2026-10-09T03:55:27.983Z"
+  },
+  {
+    "id": "user_1792135350284_c2b4509b",
+    "username": "giri_077",
+    "email": "girigiriprasad1785@gmail.com",
+    "name": "giriprasad",
+    "salt": "ad5406817fd9c4b2e8e339fa3bc1772a",
+    "passwordHash": "685e877bd2285f0078e7334bcfad5ec25adbfe04d9a41315c910ee1963ee5246dc6a5caaa75c16c0b81b364c0e05af1d1dceb96d302d4410798a15d94d9e0de0",
+    "createdAt": "2026-10-16T07:22:30.285Z"
+  }
+]

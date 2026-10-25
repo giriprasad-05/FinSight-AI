@@ -1,0 +1,136 @@
+{
+  "description": "FinSight AI Step 9 -- Investment Risk Assessment Engine",
+  "model_type": "Rule-based quantitative risk scoring",
+  "risk_components": [
+    "volatility",
+    "max_drawdown",
+    "downside_volatility",
+    "recent_volatility"
+  ],
+  "weights": {
+    "volatility": 0.35,
+    "max_drawdown": 0.3,
+    "downside_volatility": 0.2,
+    "recent_volatility": 0.15
+  },
+  "risk_thresholds": {
+    "LOW": [
+      0,
+      33
+    ],
+    "MEDIUM": [
+      34,
+      66
+    ],
+    "HIGH": [
+      67,
+      100
+    ]
+  },
+  "normalization_method": "Piecewise linear interpolation between empirical percentile anchors derived from the 35-stock FinSight AI training universe. Anchors: 5th/25th/50th/75th/95th percentiles map to scores 5/25/50/75/95. Values outside anchor range are linearly extrapolated and clamped to [0,100].",
+  "normalization_anchors": {
+    "volatility": [
+      [
+        0.1904,
+        5.0
+      ],
+      [
+        0.2217,
+        25.0
+      ],
+      [
+        0.2502,
+        50.0
+      ],
+      [
+        0.3344,
+        75.0
+      ],
+      [
+        0.6644,
+        95.0
+      ]
+    ],
+    "max_drawdown": [
+      [
+        0.1364,
+        5.0
+      ],
+      [
+        0.195,
+        25.0
+      ],
+      [
+        0.2517,
+        50.0
+      ],
+      [
+        0.3489,
+        75.0
+      ],
+      [
+        0.4175,
+        95.0
+      ]
+    ],
+    "downside_volatility": [
+      [
+        0.1299,
+        5.0
+      ],
+      [
+        0.1539,
+        25.0
+      ],
+      [
+        0.1828,
+        50.0
+      ],
+      [
+        0.2145,
+        75.0
+      ],
+      [
+        0.3477,
+        95.0
+      ]
+    ],
+    "recent_volatility": [
+      [
+        0.1312,
+        5.0
+      ],
+      [
+        0.178,
+        25.0
+      ],
+      [
+        0.2179,
+        50.0
+      ],
+      [
+        0.3903,
+        75.0
+      ],
+      [
+        0.6583,
+        95.0
+      ]
+    ]
+  },
+  "calculation_windows": {
+    "long_term_trading_days": 252,
+    "recent_trading_days": 20,
+    "calendar_days_fetched": 504,
+    "trading_days_per_year": 252
+  },
+  "metric_definitions": {
+    "annualized_volatility": "std(daily_returns) * sqrt(252) over last 252 trading days",
+    "max_drawdown": "max((close - rolling_peak) / rolling_peak) over last 252 trading days",
+    "downside_volatility": "std(negative daily returns only) * sqrt(252) over last 252 trading days",
+    "recent_volatility": "std(daily_returns) * sqrt(252) over most recent 20 trading days"
+  },
+  "formula": "risk_score = 0.35*vol_score + 0.30*dd_score + 0.20*ds_score + 0.15*rec_score",
+  "reference_universe": "35 stocks (15 US + 20 Indian NSE), ~2018-2026 daily OHLCV data",
+  "disclaimer": "Risk scores are statistical estimates only. Not financial advice."
+}

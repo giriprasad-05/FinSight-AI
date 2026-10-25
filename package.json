@@ -1,0 +1,11 @@
+{
+  "name": "finsight-ai",
+  "version": "2.0.0",
+  "private": true,
+  "description": "FinSight AI — Full Stack Financial Analytics and Explainable AI System",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "start": "node scripts/dev.js"
+  }
+}

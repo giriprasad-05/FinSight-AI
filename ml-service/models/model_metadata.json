@@ -1,0 +1,172 @@
+{
+  "model_type": "XGBClassifier",
+  "objective": "multi:softprob",
+  "num_classes": 3,
+  "class_mapping": {
+    "0": "DOWN",
+    "1": "FLAT",
+    "2": "UP"
+  },
+  "random_seed": 42,
+  "tree_method": "hist (CPU)",
+  "xgboost_version": "3.4.1",
+  "numpy_version": "2.1.3",
+  "pandas_version": "2.2.3",
+  "python_version": "3.13.5",
+  "training_datetime": "2026-08-26 22:03:18",
+  "feature_names": [
+    "Open",
+    "High",
+    "Low",
+    "Close",
+    "Volume",
+    "Daily_Return",
+    "MA_5",
+    "MA_10",
+    "MA_20",
+    "MA_50",
+    "RSI_14",
+    "MACD",
+    "MACD_Signal",
+    "Volatility_20",
+    "Volume_Change",
+    "Price_Change_Pct",
+    "High_Low_Pct"
+  ],
+  "feature_count": 17,
+  "target_name": "Trend_Code",
+  "target_definition": {
+    "target_name": "Trend_Code",
+    "label_column": "Trend_Label",
+    "classes": {
+      "DOWN": 0,
+      "FLAT": 1,
+      "UP": 2
+    },
+    "thresholds": {
+      "UP": "> +1.0%",
+      "DOWN": "< -1.0%",
+      "FLAT": "[-1.0%, +1.0%]"
+    },
+    "description": "Next trading day directional price movement classification."
+  },
+  "train_row_count": 47369,
+  "validation_row_count": 10161,
+  "test_row_count": 10120,
+  "best_iteration": 42,
+  "selected_hyperparameters": {
+    "n_estimators": 500,
+    "learning_rate": 0.1,
+    "max_depth": 6,
+    "min_child_weight": 3,
+    "subsample": 0.8,
+    "colsample_bytree": 1.0,
+    "reg_alpha": 0.0,
+    "reg_lambda": 1.0,
+    "early_stopping_rounds": 30
+  },
+  "baseline_val_metrics": {
+    "accuracy": 0.5504379490207657,
+    "f1_macro": 0.35354897085550285
+  },
+  "majority_class_baseline": {
+    "val_accuracy": 0.5302627694124594,
+    "val_f1_macro": 0.23101164061997556,
+    "test_accuracy": 0.5426877470355731,
+    "test_f1_macro": 0.23452045435135369
+  },
+  "validation_metrics": {
+    "accuracy": 0.5518157661647476,
+    "precision_macro": 0.45752373597723023,
+    "precision_weighted": 0.49307313870230807,
+    "recall_macro": 0.39143423900507157,
+    "recall_weighted": 0.5518157661647476,
+    "f1_macro": 0.3604956931873519,
+    "f1_weighted": 0.4655179685716915,
+    "roc_auc_ovr_macro": 0.6113781755044106,
+    "per_class": {
+      "DOWN": {
+        "precision": 0.4014732965009208,
+        "recall": 0.0960352422907489,
+        "f1": 0.15499466761464628
+      },
+      "FLAT": {
+        "precision": 0.5782023247784556,
+        "recall": 0.9324424647364514,
+        "f1": 0.7137884492434468
+      },
+      "UP": {
+        "precision": 0.39289558665231433,
+        "recall": 0.14582500998801437,
+        "f1": 0.2127039627039627
+      }
+    },
+    "confusion_matrix": [
+      [
+        218,
+        1722,
+        330
+      ],
+      [
+        130,
+        5024,
+        234
+      ],
+      [
+        195,
+        1943,
+        365
+      ]
+    ]
+  },
+  "test_metrics": {
+    "accuracy": 0.5558300395256917,
+    "precision_macro": 0.4479934080405588,
+    "precision_weighted": 0.48962627109596063,
+    "recall_macro": 0.3808391311967961,
+    "recall_weighted": 0.5558300395256917,
+    "f1_macro": 0.34592282680718034,
+    "f1_weighted": 0.46274219677279915,
+    "roc_auc_ovr_macro": 0.6189139670534362,
+    "per_class": {
+      "DOWN": {
+        "precision": 0.3912133891213389,
+        "recall": 0.08230633802816902,
+        "f1": 0.136
+      },
+      "FLAT": {
+        "precision": 0.5808234630569656,
+        "recall": 0.9375455207574654,
+        "f1": 0.7172807689628753
+      },
+      "UP": {
+        "precision": 0.37194337194337196,
+        "recall": 0.12266553480475383,
+        "f1": 0.18448771145866583
+      }
+    },
+    "confusion_matrix": [
+      [
+        187,
+        1831,
+        254
+      ],
+      [
+        109,
+        5149,
+        234
+      ],
+      [
+        182,
+        1885,
+        289
+      ]
+    ]
+  },
+  "model_artifacts": {
+    "model_file": "D:\\FinSight AI\\ml-service\\models\\xgboost_trend_model.json",
+    "metadata_file": "D:\\FinSight AI\\ml-service\\models\\model_metadata.json",
+    "feature_importance_file": "D:\\FinSight AI\\ml-service\\models\\feature_importance.csv",
+    "test_predictions_file": "D:\\FinSight AI\\ml-service\\models\\test_predictions.csv"
+  }
+}

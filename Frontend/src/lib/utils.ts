@@ -2,38 +2,42 @@
 
 /** Format a number as USD currency */
 export function formatCurrency(value: number, compact = false): string {
+  const safeValue = value ?? 0;
   if (compact) {
-    if (Math.abs(value) >= 1e12) return `$${(value / 1e12).toFixed(2)}T`;
-    if (Math.abs(value) >= 1e9)  return `$${(value / 1e9).toFixed(2)}B`;
-    if (Math.abs(value) >= 1e6)  return `$${(value / 1e6).toFixed(2)}M`;
-    if (Math.abs(value) >= 1e3)  return `$${(value / 1e3).toFixed(1)}K`;
-    return `$${value.toFixed(2)}`;
+    if (Math.abs(safeValue) >= 1e12) return `$${(safeValue / 1e12).toFixed(2)}T`;
+    if (Math.abs(safeValue) >= 1e9)  return `$${(safeValue / 1e9).toFixed(2)}B`;
+    if (Math.abs(safeValue) >= 1e6)  return `$${(safeValue / 1e6).toFixed(2)}M`;
+    if (Math.abs(safeValue) >= 1e3)  return `$${(safeValue / 1e3).toFixed(1)}K`;
+    return `$${safeValue.toFixed(2)}`;
   }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value);
+  }).format(safeValue);
 }
 
 /** Format a number as percentage with sign */
 export function formatPercent(value: number, includeSign = true): string {
-  const sign = includeSign && value > 0 ? '+' : '';
-  return `${sign}${value.toFixed(2)}%`;
+  const safeValue = value ?? 0;
+  const sign = includeSign && safeValue > 0 ? '+' : '';
+  return `${sign}${safeValue.toFixed(2)}%`;
 }
 
 /** Format large numbers with commas */
 export function formatNumber(value: number): string {
-  return new Intl.NumberFormat('en-US').format(value);
+  const safeValue = value ?? 0;
+  return new Intl.NumberFormat('en-US').format(safeValue);
 }
 
 /** Format volume (e.g. 54.3M) */
 export function formatVolume(value: number): string {
-  if (value >= 1e9) return `${(value / 1e9).toFixed(1)}B`;
-  if (value >= 1e6) return `${(value / 1e6).toFixed(1)}M`;
-  if (value >= 1e3) return `${(value / 1e3).toFixed(0)}K`;
-  return value.toString();
+  const safeValue = value ?? 0;
+  if (safeValue >= 1e9) return `${(safeValue / 1e9).toFixed(1)}B`;
+  if (safeValue >= 1e6) return `${(safeValue / 1e6).toFixed(1)}M`;
+  if (safeValue >= 1e3) return `${(safeValue / 1e3).toFixed(0)}K`;
+  return safeValue.toString();
 }
 
 /** Determine gain/loss class name */

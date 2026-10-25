@@ -1,9 +1,19 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { User } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { User, LogOut, LogIn } from 'lucide-react';
+import { useAuthStore } from '@/store/authStore';
+
 export { StockSearch } from '@/components/search/StockSearch';
 
 export function Navbar(): React.ReactElement {
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login', { replace: true });
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar__left">
@@ -22,23 +32,45 @@ export function Navbar(): React.ReactElement {
         >
           Dashboard
         </NavLink>
-        <a href="#learn" className="navbar__nav-link">
-          Learn
-        </a>
-        <a href="#about" className="navbar__nav-link">
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            `navbar__nav-link${isActive ? ' navbar__nav-link--active' : ''}`
+          }
+        >
           About
-        </a>
+        </NavLink>
       </div>
 
       <div className="navbar__right">
-        <button
-          type="button"
-          className="navbar__avatar"
-          title="User Profile"
-          aria-label="User Profile"
-        >
-          <User size={16} />
-        </button>
+        {isAuthenticated ? (
+          <div className="navbar__user-info">
+            <div className="navbar__user-pill" title={user?.email || user?.name || 'Logged in'}>
+              <User size={13} />
+              <span className="navbar__user-name">{user?.username || 'demo'}</span>
+            </div>
+            <button
+              type="button"
+              className="btn btn--secondary btn--sm"
+              onClick={handleLogout}
+              title="Log Out"
+              aria-label="Log Out"
+            >
+              <LogOut size={13} />
+              <span>Log Out</span>
+            </button>
+          </div>
+        ) : (
+          <NavLink
+            to="/login"
+            className="btn btn--primary btn--sm"
+            title="Sign In"
+            aria-label="Sign In"
+          >
+            <LogIn size={13} />
+            <span>Sign In</span>
+          </NavLink>
+        )}
       </div>
     </nav>
   );

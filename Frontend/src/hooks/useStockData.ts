@@ -54,21 +54,21 @@ export function useTrendAnalysis(ticker: string | null) {
   });
 }
 
-export function useEducationalInsight(ticker: string | null) {
+
+export function useStockExplanation(ticker: string | null) {
   return useQuery({
-    queryKey: queryKeys.education.insight(ticker ?? ''),
-    queryFn: () => stockService.getEducationalInsight(ticker!),
+    queryKey: queryKeys.explanation.detail(ticker ?? ''),
+    queryFn: () => stockService.getExplanation(ticker!),
     enabled: !!ticker,
-    staleTime: 30 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 20 * 60 * 1000,
   });
 }
 
-export function useStockSearch(query: string) {
+export function useStockSearch(query: string = '') {
   return useQuery({
-    queryKey: queryKeys.stocks.search(query),
-    queryFn: () => stockService.searchStocks(query),
-    enabled: query.length > 0,
-    staleTime: 30 * 1000,
+    queryKey: queryKeys.stocks.search(query.trim()),
+    queryFn: () => stockService.searchStocks(query.trim()),
+    staleTime: 60 * 1000,
   });
 }

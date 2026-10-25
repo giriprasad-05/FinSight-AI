@@ -19,4 +19,7 @@ export const queryKeys = {
   education: {
     insight: (ticker: string) => ['education', 'insight', ticker] as const,
   },
+  explanation: {
+    detail: (ticker: string) => ['explanation', ticker] as const,
+  },
 } as const;

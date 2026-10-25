@@ -1,12 +1,13 @@
 // ── Service index — the ONE place to swap mock ↔ real ─────────
-// To switch to real backend: set VITE_USE_MOCK=false in .env
+// To switch to the real Node.js backend, set in Frontend/.env:
+//   VITE_USE_MOCK=false
+//   VITE_API_BASE_URL=http://localhost:5000
 import { mockStockService } from './stockService';
-import { mockMentorService } from './mentorService';
+import { apiStockService } from './apiService';
+import { apiMentorService } from './mentorService';
 
-export const stockService = mockStockService;
-export const mentorService = mockMentorService;
+const useMock = import.meta.env.VITE_USE_MOCK !== 'false';
 
-// Future: conditional swap (when backend is ready)
-// const useMock = import.meta.env.VITE_USE_MOCK === 'true';
-// export const stockService = useMock ? mockStockService : apiStockService;
-// export const mentorService = useMock ? mockMentorService : apiMentorService;
+export const stockService = useMock ? mockStockService : apiStockService;
+export const mentorService = apiMentorService;
+export { authService } from './authService';
